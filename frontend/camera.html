@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aparat</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell app-shell--camera" aria-label="Aparat">
+      <section class="camera-view" aria-labelledby="camera-title">
+        <div class="camera-copy">
+          <p>Nowe ujecie</p>
+          <h1 id="camera-title">Zrob zdjecie</h1>
+        </div>
+
+        <div class="camera-layout">
+          <section class="camera-live" aria-label="Podglad kamery">
+            <div class="camera-preview">
+              <video data-camera-video autoplay playsinline muted></video>
+              <canvas data-camera-canvas hidden></canvas>
+              <p data-camera-status>Nacisnij przycisk, aby wlaczyc podglad kamery.</p>
+            </div>
+            <div class="camera-actions">
+              <button class="camera-button" type="button" data-camera-start>Wlacz kamere</button>
+              <button class="camera-button camera-button--dark" type="button" data-camera-capture>Zrob zdjecie</button>
+            </div>
+          </section>
+
+          <form class="camera-panel" action="/api/storeimg" method="post" enctype="multipart/form-data">
+            <label class="camera-dropzone">
+              <input type="file" name="photo" accept="image/*" capture="environment">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 17.5V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5Z"/>
+                <path d="m7 16 3.2-3.2a1.2 1.2 0 0 1 1.7 0L14 15l1.1-1.1a1.2 1.2 0 0 1 1.7 0L20 17"/>
+                <path d="M8.5 8.5h.01"/>
+              </svg>
+              <span>Dodaj zdjecie z pliku</span>
+            </label>
+
+            <button class="submit-photo" type="submit">Zapisz zdjecie</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Glowne podstrony">
+      <a class="nav-action" href="index.html" aria-label="Przejdz do galerii">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-11Z"/>
+          <path d="m7 16 3.2-3.2a1.2 1.2 0 0 1 1.7 0L14 15l1.1-1.1a1.2 1.2 0 0 1 1.7 0L20 17"/>
+          <path d="M8.5 8.5h.01"/>
+        </svg>
+        <span>Galeria</span>
+      </a>
+      <a class="nav-action is-active" href="camera.html" aria-label="Przejdz do aparatu">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 8.5A2.5 2.5 0 0 1 7.5 6h1.8l1.2-1.6A1 1 0 0 1 11.3 4h1.4a1 1 0 0 1 .8.4L14.7 6h1.8A2.5 2.5 0 0 1 19 8.5v8A2.5 2.5 0 0 1 16.5 19h-9A2.5 2.5 0 0 1 5 16.5v-8Z"/>
+          <path d="M12 15.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+        </svg>
+        <span>Aparat</span>
+      </a>
+    </nav>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

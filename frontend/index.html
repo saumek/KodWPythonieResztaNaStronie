@@ -3,22 +3,89 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Budowa w trakcie</title>
+    <title>Galeria</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <main class="construction">
-      <section class="construction__panel" aria-label="Informacja o budowie strony">
-        <p class="construction__eyebrow">Strona startuje niebawem</p>
-        <h1>Budowa w trakcie</h1>
-        <p class="construction__text">
-          Pracujemy nad nowa wersja strony. Wroc tu za chwile.
-          <form action="/api/storeimg" method="post" enctype="multipart/form-data">
-            <input type="file" name="photo">
-            <input type="submit">
-          </form>
-        </p>
+    <main class="app-shell" aria-label="Galeria zdjec i filmow">
+      <nav class="category-strip" aria-label="Kategorie galerii">
+        <button class="category is-active" type="button">Wszystko</button>
+        <button class="category" type="button">Portrety</button>
+        <button class="category" type="button">Miasto</button>
+        <button class="category" type="button">Natura</button>
+        <button class="category" type="button">Filmy</button>
+      </nav>
+
+      <section class="gallery-view" aria-labelledby="gallery-title">
+        <div class="gallery-heading">
+        </div>
+        
+<p id="result"></p>
+        <div class="media-grid" aria-label="Przykladowe zdjecia">
+          <button class="media-item" type="button" data-gallery-item>
+            <img src="assets/natura.svg" alt="Ilustracyjny krajobraz natury">
+            <span>Natura</span>
+          </button>
+          <button class="media-item" type="button" data-gallery-item>
+            <img src="assets/las.svg" alt="Ilustracyjny zielony las">
+            <span>Las</span>
+          </button>
+          <button class="media-item" type="button" data-gallery-item>
+            <img src="assets/podroz.svg" alt="Ilustracyjny krajobraz podrozy">
+            <span>Podroz</span>
+          </button>
+          <button class="media-item" type="button" data-gallery-item>
+            <img src="assets/dom.svg" alt="Ilustracyjny dom">
+            <span>Dom</span>
+          </button>
+          <button class="media-item" type="button" data-gallery-item>
+            <img src="assets/miasto.svg" alt="Ilustracyjny widok miasta">
+            <span>Miasto</span>
+          </button>
+        </div>
       </section>
     </main>
+
+    <div class="lightbox" data-lightbox hidden>
+      <button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij podglad">×</button>
+      <button class="lightbox__arrow lightbox__arrow--prev" type="button" data-lightbox-prev aria-label="Poprzednie zdjecie">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+      </button>
+      <figure class="lightbox__figure">
+        <img data-lightbox-image src="" alt="">
+        <figcaption data-lightbox-caption></figcaption>
+      </figure>
+      <button class="lightbox__arrow lightbox__arrow--next" type="button" data-lightbox-next aria-label="Nastepne zdjecie">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m9 6 6 6-6 6"/>
+        </svg>
+      </button>
+    </div>
+    <form action="/api/storephoto" method="post">
+      <input type="number" name="id" id="id">
+      <input type="text" name="nazwa" id="nazwa">
+      <input type="submit" value="">
+    </form>
+    <nav class="bottom-nav" aria-label="Glowne podstrony">
+      <a class="nav-action is-active" href="index.html" aria-label="Przejdz do galerii">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-11Z"/>
+          <path d="m7 16 3.2-3.2a1.2 1.2 0 0 1 1.7 0L14 15l1.1-1.1a1.2 1.2 0 0 1 1.7 0L20 17"/>
+          <path d="M8.5 8.5h.01"/>
+        </svg>
+        <span>Galeria</span>
+      </a>
+      <a class="nav-action" href="camera.html" aria-label="Przejdz do aparatu">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 8.5A2.5 2.5 0 0 1 7.5 6h1.8l1.2-1.6A1 1 0 0 1 11.3 4h1.4a1 1 0 0 1 .8.4L14.7 6h1.8A2.5 2.5 0 0 1 19 8.5v8A2.5 2.5 0 0 1 16.5 19h-9A2.5 2.5 0 0 1 5 16.5v-8Z"/>
+          <path d="M12 15.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+        </svg>
+        <span>Aparat</span>
+      </a>
+    </nav>
+
+    <script src="app.js" defer></script>
   </body>
 </html>
