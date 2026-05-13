@@ -1,1 +1,3 @@
-Pierwszy commit
+Pierwszy commit...
+Nwm czy działa mi podpisywanie tych commitów xd
+Oliwia robi tescik
