@@ -14,6 +14,25 @@ class DB():
             )
             """)
 
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS file_category (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                file_id INTEGER NOT NULL,
+                category_id INTEGER NOT NULL,
+                FOREIGN KEY (file_id)
+                REFERENCES files(id),
+                FOREIGN KEY (category_id)
+                REFERENCES categories(id)
+            )
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                category_name TEXT NOT NULL
+            )
+            """)
+
     def store(self,nazwa:str):
         with sqlite3.connect(self.dbname) as connection:
 
@@ -34,12 +53,21 @@ class DB():
             """,(id,))
             return cursor.fetchall()
         
-    def getall(self):
+    def getallfiles(self):
         with sqlite3.connect(self.dbname) as connection:
 
             cursor = connection.cursor()
 
             cursor.execute(f"""
             SELECT * FROM files; 
+            """)
+            return cursor.fetchall()
+    def getallcategories(self):
+        with sqlite3.connect(self.dbname) as connection:
+
+            cursor = connection.cursor()
+
+            cursor.execute(f"""
+            SELECT * FROM categories; 
             """)
             return cursor.fetchall()

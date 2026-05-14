@@ -18,11 +18,14 @@ def get_photo(x:int):
 
 @app.get("/api/photos")
 def get_photos():
-    return db.getall()
+    return db.getallfiles()
+
+@app.get("/api/categories")
+def get_photos():
+    return db.getallcategories()
 
 @app.get("/api/storephoto/{x}")
 def store(x):
     return db.store(x)
-    
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
