@@ -10,7 +10,8 @@ class DB():
             cursor.execute("""
             CREATE TABLE IF NOT EXISTS files (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                filename TEXT NOT NULL
+                filename TEXT NOT NULL,
+                description TEXT
             )
             """)
 
