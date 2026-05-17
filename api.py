@@ -9,23 +9,24 @@ app = FastAPI()
 db = DB()
 
 @app.get("/api/status")
-def status():
+async def status():
     return {"ok": True}
 
 @app.get("/api/photo/id={x}")
-def get_photo(x:int):
+async def get_photo(x:int):
     return db.get(x)
 
 @app.get("/api/photos")
-def get_photos():
+async def get_photos():
     return db.getallfiles()
 
 @app.get("/api/categories")
-def get_photos():
+async def get_photos():
     return db.getallcategories()
 
 @app.get("/api/storephoto/{x}")
-def store(x):
+async def store(x):
     return db.store(x)
 
+#frontend na adresie /
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
