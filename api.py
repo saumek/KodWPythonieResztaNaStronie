@@ -3,6 +3,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi import WebSocket
 from pydantic import BaseModel
 from DB import DB
+##################################
+# schemat bazy danych
+# mamy tabele: 
+# files - tutaj sa wszysztkie zdjecia i filmy czy cos. Kolumny - (id, filename, description)
+# categories - tutaj sa wszystkie kategorie. Kolumny - (id, name)
+# file_category - to tabela posredniczaca ktora lacza pliki z kategoriami. Kolumny - (file_id, category_id)
+# nie ustawiajcie 'id' recznie ono samo sie ustawia
+
 
 app = FastAPI()
 
@@ -12,21 +20,25 @@ db = DB()
 async def status():
     return {"ok": True}
 
-@app.get("/api/photo/id={x}")
+@app.get("/api/file/id={x}")
 async def get_photo(x:int):
-    return db.get(x)
+    return db.get_by_id("files","*",x)
 
-@app.get("/api/photos")
+@app.get("/api/files")
 async def get_photos():
-    return db.getallfiles()
+    return db.get("files")
+
+@app.post("/api/storefile")
+async def store_file(x):
+    return db.store("files","filename",x)
 
 @app.get("/api/categories")
-async def get_photos():
-    return db.getallcategories()
+async def get_categories():
+    return db.get("categories")
 
-@app.get("/api/storephoto/{x}")
-async def store(x):
-    return db.store(x)
+@app.post("/api/storecategory")
+async def set_category(name):
+    return db.store("categories","name",name)
 
 #frontend na adresie /
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

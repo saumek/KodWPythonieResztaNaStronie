@@ -34,7 +34,7 @@ class DB():
             connection.execute("""
             CREATE TABLE IF NOT EXISTS categories (
                 id INTEGER PRIMARY KEY,
-                category_name TEXT NOT NULL UNIQUE
+                name TEXT NOT NULL UNIQUE
             )
             """)
 
@@ -55,46 +55,46 @@ class DB():
             )
             """)
 
-    def store(self,nazwa:str) -> int:
-        #dodaje nowy rekord do bazy danych i zwraca id tego zdjecia
+    def custom_sql(self,sql:str,param:tuple):
+        """
+            wykonuje dowolny sql z parametrami ( tam gdzie w sql wpiszemy ? tam wstawiony bedzie parametr)\n
+            przyklay uzycia: \n
+            **bd.custom_sql("SELECT * FROM files WHERE id = ? and filename = ?",[parametr1,parametr2])**\n
+            **bd.custom_sql("SELECT * FROM files WHERE id = ?",[parametr])**
+        """
+        if isinstance(param,list):
+            param=tuple(param)
         with self.connCm as connection:
             cursor = connection.cursor()
 
-            cursor.execute("""
-            INSERT INTO files (filename) VALUES (?); 
-            """,(nazwa,))
-            
-            return cursor.lastrowid
-    
-    def get(self, file_id:int):
-        #zwraca plik o danym id
-        with self.connCm as connection:
-            cursor = connection.cursor()
-
-            cursor.execute("""
-            SELECT * FROM files WHERE id=?; 
-            """,(file_id,))
+            cursor.execute(sql,param)
 
             return cursor.fetchall()
+        
+    def store(self,tablename:str,columns:str,values:str) -> int:
+        """
+        dodaje nowy rekord do bazy danych\n
+        przyklad uzycia:\n
+        **db.store("files","filename , description","jakas_nazwa , opis_ciekawy)**
+        """
+        return self.custom_sql(f"INSERT INTO {str(tablename)} ({str(columns)}) VALUES (?)",(str(values),))
     
-    def getallfiles(self):
-        #zwraca wszystkie pliki
-        with self.connCm as connection:
-            cursor = connection.cursor()
-
-            cursor.execute("""
-            SELECT * FROM files; 
-            """)
-
-            return cursor.fetchall()
+    def get(self,tablename:str,columns:str = "*"):
+        """
+        zwraca wszystkie rekordy o danych kolumnach z danej tabeli\n
+        przyklad uzycia: \n
+        **db.get("files") <- zwraca wszystkie rekordy z tabeli files**\n
+        **db.get("files","filename") <- zwraca tylko nazwy plikow z tabeli files**
+        """
+        return self.custom_sql(f"SELECT {str(columns)} FROM {str(tablename)}",())
     
-    def getallcategories(self):
-        #zwraca wszystkie kategorie
-        with self.connCm as connection:
-            cursor = connection.cursor()
-
-            cursor.execute(f"""
-            SELECT * FROM categories; 
-            """)
-
-            return cursor.fetchall()
+    def get_by_id(self, tablename:str, columns:str, id:int|str):
+        """
+        zwraca rekord o danych kolumnach z danej tabeli o danym id\n
+        przyklad uzycia: \n
+        **db.get_by_id("files","*",1) <- wzraza caly rekord z tabeli files o id=1**\n
+        **db.get_by_id("files","description",1) <- wzraza tylko opis rekordu z tabeli files o id=1**
+        """
+        return self.custom_sql(f"SELECT {str(columns)} FROM {str(tablename)} WHERE id=?",(str(id),))
+    
+    
