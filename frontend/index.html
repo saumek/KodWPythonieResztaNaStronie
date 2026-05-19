@@ -5,22 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="style.css">
-    <script src="app.js"></script>
+    <script src="app.js" defer></script>
   </head>
-  <body class="bg-gray-900">
+  <body class="bg-gray-950 text-violet-100">
 
-    <div class="relative bg-gray-600 max-w-dvw m-10 h-[80svh] rounded-4xl">
+    
+    <div class="relative bg-gray-950 max-w-dvw m-10 h-[80svh] rounded-4xl border-gray-800 border-1">
 
-      <div class="kategorie absolute bottom-2 left-2 top-2 rounded-4xl bg-gray-500 w-50 flex flex-col p-2 justify-start items-stretch">
-        <h2 class="text-center">Kategorie</h2>
+      <div class="absolute bottom-2 left-2 top-2 rounded-4xl border-gray-800 border-1 bg-gray-950 w-50 flex flex-col p-2 justify-start items-stretch">
+        <div class="relative">
+          <h2 class="text-center">Kategorie</h2>
+          <button class="absolute top-0 right-2 hover:bg-gray-800 text-center aspect-square w-7 rounded-full border-gray-800 transition-all duration-75 border-1" onclick="createNewCategoryWindow()"> 
+            <div class="absolute top-0 left-0 right-0 bottom-0 text-center">+</div>
+          </button>
+        </div>
         <br>
-        <!-- <button class="bg-gray-400 h-10 rounded-4xl pl-3 hover:scale-102 duration-100 transition-all" onclick="select_category(self)">
-          <h1 class="text-left">hejk</h1>
-        </button> -->
+        <div class="kategorie relative h-max flex flex-col overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-800 [&::-webkit-scrollbar-thumb]:rounded-full">
+      
+
+        </div>
       </div>
 
-      <div class="absolute bottom-2 left-54 top-2 right-2 rounded-4xl bg-gray-600">
-        photos
+      <div class="absolute bottom-2 left-54 top-2 right-2 rounded-4xl bg-gray-950 border-gray-800 border-1">
+        test
       </div>
 
     </div>

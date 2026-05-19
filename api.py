@@ -10,7 +10,8 @@ from DB import DB
 # categories - tutaj sa wszystkie kategorie. Kolumny - (id, name)
 # file_category - to tabela posredniczaca ktora lacza pliki z kategoriami. Kolumny - (file_id, category_id)
 # nie ustawiajcie 'id' recznie ono samo sie ustawia
-
+class StoreCategoryModel(BaseModel):
+    name:str
 
 app = FastAPI()
 
@@ -37,8 +38,8 @@ async def get_categories():
     return db.get("categories")
 
 @app.post("/api/storecategory")
-async def set_category(name):
-    return db.store("categories","name",name)
+async def set_category(category: StoreCategoryModel):
+    return db.store("categories","name",category.name)
 
 #frontend na adresie /
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

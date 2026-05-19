@@ -1,5 +1,11 @@
 document.addEventListener("DOMContentLoaded",async (e)=>{
     
+  load_categories()
+  this.isAddCategoryWindowOpen = false
+
+})
+
+async function load_categories(){
   const url = "/api/categories";
   try {
     const response = await fetch(url);
@@ -8,16 +14,64 @@ document.addEventListener("DOMContentLoaded",async (e)=>{
     }
 
     const result = await response.json();
+    placeForCat = document.querySelectorAll(".kategorie")[0]
+    placeForCat.innerHTML=''
     result.forEach(element => {
         console.log(element)
-        document.querySelectorAll(".kategorie")[0].innerHTML+=get_category_html(element[0],element[1])
+        placeForCat.innerHTML+=get_category_html(element[0],element[1])
     });
   } catch (error) {
     console.error(error.message);
   }
-
-})
+}
 
 function get_category_html(id,name){
-    return `<button id=${id} class="bg-gray-400 h-10 rounded-4xl pl-3 hover:scale-102 duration-100 transition-all mb-2" onclick="select_category(self)"><h1 class="text-left">${name}</h1></button>`
+    return `<button id=${id} class="bg-gray-900 border-gray-800 border-1 min-h-10 h-10 mr-1 rounded-4xl pl-3 hover:scale-102 duration-100 transition-all mb-2" onclick="select_category(self)"><h1 class="text-left">${name}</h1></button>`
+}
+
+function createNewCategoryWindow(){
+  if(!this.isAddCategoryWindowOpen){
+    this.isAddCategoryWindowOpen = true
+      document.querySelector("body").innerHTML+=`
+        <div dodawaniekategori class="z-10 absolute flex flex-row top-0 right-0 bg-[#dfa7f911] left-0 bottom-0 align-middle justify-around items-center pb-30">
+          <div class="relative bg-gray-800 w-100 h-50 rounded-4xl">
+            <div class="relative top-2 left-0 right-0 text-center">Dodajesz nową kategorie</div>
+            <form id="saveCat" class="relative left-0 right-0 top-15 flex flex-col items-center justify-around gap-6">
+              <label class="relative w-[60%]">Nazwa:<input type="text" name="name" id="name" class="bg-gray-700 ml-2" required></label>
+              <button type="submit" class=" hover:bg-gray-700 text-center rounded-4xl border-gray-700 transition-all duration-75 border-1 pt-1.5 pb-1.5 pl-3 pr-3">Zapisz</button>
+            </form>
+            <button class="absolute top-2 right-4 hover:bg-gray-700 text-center aspect-square w-7 rounded-full border-gray-700 transition-all duration-75 border-1"> 
+              <div class="absolute top-0 left-0 right-0 bottom-0 text-center">x</div>
+            </button>
+          </div>
+        </div>
+      `
+    form = document.getElementById("saveCat")
+    form.addEventListener("submit",(event)=>{onAddCategorySubmit(form,event)})
+  }
+}
+
+function closeAddCategory(){
+  document.querySelectorAll("div[dodawaniekategori]")[0].remove()
+  this.isAddCategoryWindowOpen=false
+}
+
+function onAddCategorySubmit(form, event){
+  event.preventDefault();
+  catname = form.querySelectorAll("input")[0].value
+  saveCat(catname)
+  closeAddCategory()
+}
+
+async function saveCat(catname){
+  await fetch("/api/storecategory", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: catname,
+    }),
+  });
+  load_categories()
 }
