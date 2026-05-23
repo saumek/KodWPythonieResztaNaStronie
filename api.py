@@ -1,8 +1,10 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi import WebSocket
 from pydantic import BaseModel
 from DB import DB
+from file_add import FileAdd
+from datetime import datetime
 ##################################
 # schemat bazy danych
 # mamy tabele: 
@@ -17,6 +19,8 @@ app = FastAPI()
 
 db = DB()
 
+file_add = FileAdd()
+
 @app.get("/api/status")
 async def status():
     return {"ok": True}
@@ -30,8 +34,25 @@ async def get_photos():
     return db.get("files")
 
 @app.post("/api/storefile")
-async def store_file(x):
-    return db.store("files","filename",x)
+async def store_file(
+    description: str = Form(...),
+    file: UploadFile = File(...)
+):
+    saved_filename = await file_add.save_file(file)
+
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    db.custom_sql(
+        "INSERT INTO files (filename, description, created_at) VALUES (?, ?, ?)",
+        [saved_filename, description, current_time]
+    )
+    return {
+        "status": "success",
+        "filename": saved_filename,
+        "description": description,
+        "created_at": current_time
+    }
+
 
 @app.get("/api/categories")
 async def get_categories():

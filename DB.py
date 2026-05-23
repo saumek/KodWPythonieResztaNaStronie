@@ -27,7 +27,8 @@ class DB():
             CREATE TABLE IF NOT EXISTS files (
                 id INTEGER PRIMARY KEY,
                 filename TEXT NOT NULL,
-                description TEXT
+                description TEXT,
+                created_at TEXT NOT NULL
             )
             """)
 
