@@ -25,9 +25,9 @@ file_add = FileAdd()
 async def status():
     return {"ok": True}
 
-@app.get("/api/file/id={x}")
-async def get_photo(x:int):
-    return db.get_by_id("files","*",x)
+@app.get("/api/file/{id}")
+async def get_photo(id:int):
+    return db.get_by_id("files","*",id=id)
 
 @app.get("/api/files")
 async def get_photos():
@@ -53,6 +53,9 @@ async def store_file(
         "created_at": current_time
     }
 
+@app.get("/api/category/{id}")
+async def get_category(id:int):
+    return db.get_by_id("categories","*",id=id)
 
 @app.get("/api/categories")
 async def get_categories():

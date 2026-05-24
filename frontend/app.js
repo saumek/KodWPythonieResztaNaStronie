@@ -71,6 +71,17 @@ async function createNewCategoryWindow(){
   }
 }
 
+async function renameCategory(id){
+  if(!this.isSomethingOpen){
+    this.isSomethingOpen = true
+    let name = await load(`/api/category/${id}`)
+    name = name[0][1]
+    document.querySelector("body").innerHTML+= await load_template("./templates/renameCategory.html",{"name":name,"id":id})
+    form = document.getElementById("changeCat")
+    form.addEventListener("submit",(event)=>{onAddChangeCategoryNameSubmit(form,event)})
+  }
+}
+
 async function openFile(name){
   if(!this.isSomethingOpen){
     this.isSomethingOpen=true
@@ -80,6 +91,10 @@ async function openFile(name){
 
 function closeAddCategory(){
   document.querySelectorAll("div[dodawaniekategori]")[0].remove()
+  this.isSomethingOpen=false
+}
+function closeChangeCategoryName(){
+  document.querySelectorAll("div[zmianaNazwyKategori]")[0].remove()
   this.isSomethingOpen=false
 }
 function closePreview(){
@@ -93,10 +108,31 @@ function onAddCategorySubmit(form, event){
   saveCat(catname)
   closeAddCategory()
 }
+function onAddChangeCategoryNameSubmit(form, event){
+  event.preventDefault();
+  catname = form.querySelectorAll("input")[0].value
+  id = form.querySelectorAll("input")[1].value
+  console.log(id);
+  changeCat(id,catname)
+  closeChangeCategoryName()
+}
 
 async function saveCat(catname){
   await fetch("/api/storecategory", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: catname,
+    }),
+  });
+  load_categories()
+}
+
+async function changeCat(id,catname){
+  await fetch(`/api/category/${id}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
