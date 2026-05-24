@@ -107,4 +107,12 @@ class DB():
         """
         return self.custom_sql(f"UPDATE {str(tablename)} SET {str(columns)} WHERE {str(conditions)}", (str(values), str(condition_values)))
     
+    def delete(self, tablename:str, id:int|str):
+        """
+        usuwa rekordy w danej tabeli\n
+        przykład użycia\n
+        **db.delete("categories", id=1)**
+        """
+        return self.custom_sql(f"DELETE FROM {str(tablename)} WHERE id = ?",(str(id),))
+
     

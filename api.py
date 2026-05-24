@@ -70,6 +70,11 @@ async def update_category(id: int, category: StoreCategoryModel):
     db.update("categories", "name = ?", category.name, "id = ?", str(id))
     return {"ok": True}
 
+@app.delete("/api/category/{id}")
+async def delete_category(id:int):
+    db.delete("categories",id)
+
+
 import asyncio
 @app.websocket("/ws")
 async def connect(websocket: WebSocket):

@@ -142,6 +142,16 @@ async function changeCat(id,catname){
   });
   load_categories()
 }
+
+async function deleteCategory(id){
+  await fetch(`/api/category/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  load_categories()
+}
 // kod do testowania websocket //
 const ws = new WebSocket("ws://127.0.0.1:8000/ws");
 
