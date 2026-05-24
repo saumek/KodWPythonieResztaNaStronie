@@ -62,5 +62,13 @@ async def get_categories():
 async def set_category(category: StoreCategoryModel):
     return db.store("categories","name",category.name)
 
+@app.put("/api/category/{id}")
+async def update_category(id: int, category: StoreCategoryModel):
+    db.custom_sql(
+        "UPDATE categories SET name = ? WHERE id = ?",
+        (category.name, id)
+    )
+    return {"ok": True}
+
 #frontend na adresie /
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
