@@ -98,4 +98,13 @@ class DB():
         """
         return self.custom_sql(f"SELECT {str(columns)} FROM {str(tablename)} WHERE id=?",(str(id),))
     
+    def update(self, tablename:str, columns:str, values:str, conditions:str, condition_values:str):
+        """
+        aktualizuje rekordy w danej tabeli\n
+        przykład użycia\n
+        **db.update("categories", "name = ?", "nowa_nazwa", "id = ?", "1")**\n
+        **db.update("files", "filename = ?", "description = ?", "nowy_plik.txt, nowy_opis", "id = ?", "1")**
+        """
+        return self.custom_sql(f"UPDATE {str(tablename)} SET {str(columns)} WHERE {str(conditions)}", (str(values), str(condition_values)))
+    
     

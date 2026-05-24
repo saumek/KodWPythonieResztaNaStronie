@@ -64,10 +64,7 @@ async def set_category(category: StoreCategoryModel):
 
 @app.put("/api/category/{id}")
 async def update_category(id: int, category: StoreCategoryModel):
-    db.custom_sql(
-        "UPDATE categories SET name = ? WHERE id = ?",
-        (category.name, id)
-    )
+    db.update("categories", "name = ?", category.name, "id = ?", str(id))
     return {"ok": True}
 
 #frontend na adresie /
