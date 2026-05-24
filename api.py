@@ -67,5 +67,15 @@ async def update_category(id: int, category: StoreCategoryModel):
     db.update("categories", "name = ?", category.name, "id = ?", str(id))
     return {"ok": True}
 
+import asyncio
+@app.websocket("/ws")
+async def connect(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        await websocket.send_text("LEFT")
+        await asyncio.sleep(2)
+        await websocket.send_text("KLIK")
+        await asyncio.sleep(2)
+
 #frontend na adresie /
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

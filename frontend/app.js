@@ -106,3 +106,20 @@ async function saveCat(catname){
   });
   load_categories()
 }
+
+// kod do testowania websocket //
+const ws = new WebSocket("ws://127.0.0.1:8000/ws");
+
+ws.onopen = () => {
+  console.log("WS connected");
+  ws.send("hello");
+};
+
+ws.onmessage = (event) => {
+  if (event.data === "LEFT") {
+    console.log(new Date(),"GEST W LEWO");
+  }
+  if (event.data === "KLIK") {
+    console.log(new Date(),"Klikam");
+  }
+};
