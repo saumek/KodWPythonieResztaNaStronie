@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
+    <script src="tailwindcss.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
   </head>
   <body class="bg-gray-950 text-violet-100">
 
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="absolute bottom-2 left-54 top-2 right-2 rounded-4xl bg-gray-950 border-gray-800 border-1 p-4">
+      <div class="absolute bottom-2 overflow-y-auto left-54 top-2 right-2 rounded-4xl bg-gray-950 border-gray-800 border-1 p-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-800 [&::-webkit-scrollbar-thumb]:rounded-full ">
         <div class="files flex-row flex gap-3 flex-wrap">
             <!-- tutaj pliki -->
         </div>
