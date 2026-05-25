@@ -15,7 +15,6 @@ options = vision.HandLandmarkerOptions(base_options=BaseOptions(model_asset_path
 
 detector = vision.HandLandmarker.create_from_options(options)
 
-
 def dist(a, b):
     return math.hypot(a.x - b.x, a.y - b.y)
 
@@ -28,7 +27,7 @@ def detect_gesture(hand):
         return "LEFT"
     return "NONE"
 
-def gesture_loop():
+def gesture_loop(queue):
     # kamera
     cap = cv2.VideoCapture(0)
     timestamp = 0
@@ -52,7 +51,8 @@ def gesture_loop():
 
             gesture=detect_gesture(hand)
             if gesture!= "NONE":
-                print(gesture)  
+                queue.put(gesture)
+                #print(gesture)  
             
             # rysowanie (debug)
             for lm in hand:
@@ -68,4 +68,4 @@ def gesture_loop():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    gesture_loop()
+    gesture_loop(queue)
