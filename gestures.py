@@ -9,7 +9,7 @@ HandLandmarker = mp.tasks.vision.HandLandmarker
 HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
 
-options = vision.HandLandmarkerOptions(base_options=BaseOptions(model_asset_path='C:/Users/Dell/hand_landmarker.task'),
+options = vision.HandLandmarkerOptions(base_options=BaseOptions(model_asset_path='hand_landmarker.task'),
                                        num_hands=1, 
                                        running_mode=VisionRunningMode.VIDEO)
 
