@@ -87,7 +87,7 @@ async def add_file_to_category(content: FileCategory):
     db.store("file_category", "file_id, category_id", [content.file_id, content.category_id])
     return {"ok": True}
 
-from gestures import gesture_loop
+"""from gestures import gesture_loop
 import threading
 from queue import Queue
 queue = Queue()
@@ -102,8 +102,8 @@ import asyncio
 async def connect(websocket: WebSocket):
     await websocket.accept()
     while True:
-        gesture = queue.get()
-        await websocket.send_text(gesture)
+        gesture = await asyncio.to_thread(queue.get)
+        await websocket.send_text(str(gesture))"""
 
 #frontend na adresie /
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

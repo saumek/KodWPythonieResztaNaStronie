@@ -3,6 +3,7 @@ import mediapipe as mp
 import math
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+import time
 
 BaseOptions = mp.tasks.BaseOptions
 HandLandmarker = mp.tasks.vision.HandLandmarker
@@ -33,6 +34,7 @@ def gesture_loop(queue):
     timestamp = 0
 
     while cap.isOpened():
+        time.sleep(0.1)
         ret, frame = cap.read()
         if not ret:
             break
