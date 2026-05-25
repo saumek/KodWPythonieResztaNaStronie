@@ -15,6 +15,10 @@ from datetime import datetime
 class StoreCategoryModel(BaseModel):
     name:str
 
+class FileCategory(BaseModel):
+    file_id:int
+    category_id:int
+
 app = FastAPI()
 
 db = DB()
@@ -34,16 +38,20 @@ async def get_photos():
     return db.get("files")
 
 @app.post("/api/storefile")
+#endpoint wymagający od użytkownika opisu i załączenia pliku
 async def store_file(
     description: str = Form(...),
     file: UploadFile = File(...)
 ):
+    #zapis pliku z wygenerowaną nazwą
     saved_filename = await file_add.save_file(file)
 
+    #pobranie aktualnej daty i godziny
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    db.custom_sql(
-        "INSERT INTO files (filename, description, created_at) VALUES (?, ?, ?)",
+    #zapis danych do bazy
+    db.store(
+        "files","filename , description, created_at",
         [saved_filename, description, current_time]
     )
     return {
@@ -67,13 +75,17 @@ async def set_category(category: StoreCategoryModel):
 
 @app.put("/api/category/{id}")
 async def update_category(id: int, category: StoreCategoryModel):
-    db.update("categories", "name = ?", category.name, "id = ?", str(id))
+    db.update("categories", "name", category.name, "id", str(id))
     return {"ok": True}
 
 @app.delete("/api/category/{id}")
 async def delete_category(id:int):
     db.delete("categories",id)
 
+@app.post("/api/join")
+async def add_file_to_category(content: FileCategory):
+    db.store("file_category", "file_id, category_id", [content.file_id, content.category_id])
+    return {"ok": True}
 
 import asyncio
 @app.websocket("/ws")
