@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded",async (e)=>{
-    
+
+function startGallery(){
   load_categories()
   load_files()
   this.isSomethingOpen = false
-})
+}
 
 async function load(url) {
   try {
@@ -38,28 +38,31 @@ async function load_categories(){
   const result = await load(url)
   let placeForCat = document.querySelectorAll(".kategorie")[0]
   placeForCat.innerHTML=''
+  this.Categories={}
   for (const element of result) {
-      placeForCat.innerHTML += await get_single_html_category_cell(element[0],element[1])
+    this.Categories[element[0]]={"id":element[0],"name":element[1]}
+    placeForCat.innerHTML += await get_single_html_category_cell(this.Categories[element[0]])
   }
 }
 
-async function get_single_html_category_cell(id,name){
-    return load_template("./templates/categoryCell.html",{"id":id,"name":name})
+async function get_single_html_category_cell(element){
+    return load_template("./templates/categoryCell.html",element)
 }
 
 async function load_files(){
   const url = "/api/files";
-
   const result = await load(url);
   let placeForFiles = document.querySelectorAll(".files")[0]
   placeForFiles.innerHTML=''
+  this.Files = {}
   for (const element of result) {
-      placeForFiles.innerHTML += await get_single_html_file_cell(element[0],element[1],element[2])
+    this.Files[element[0]]={"id":element[0],"name":element[1],"desc":element[2],"date":element[3]}
+    placeForFiles.innerHTML += await get_single_html_file_cell(this.Files[element[0]])
   }
 }
 
-async function get_single_html_file_cell(id,name,desc){
-    return load_template("./templates/photoCell.html",{"id":id,"name":name,"desc":desc})
+async function get_single_html_file_cell(element){
+    return load_template("./templates/photoCell.html",element)
 }
 
 async function createNewCategoryWindow(){
@@ -74,18 +77,16 @@ async function createNewCategoryWindow(){
 async function renameCategory(id){
   if(!this.isSomethingOpen){
     this.isSomethingOpen = true
-    let name = await load(`/api/category/${id}`)
-    name = name[0][1]
-    document.querySelector("body").innerHTML+= await load_template("./templates/renameCategory.html",{"name":name,"id":id})
+    document.querySelector("body").innerHTML+= await load_template("./templates/renameCategory.html",this.Categories[id])
     form = document.getElementById("changeCat")
     form.addEventListener("submit",(event)=>{onAddChangeCategoryNameSubmit(form,event)})
   }
 }
 
-async function openFile(name){
+async function openFile(id){
   if(!this.isSomethingOpen){
     this.isSomethingOpen=true
-    document.querySelector("body").innerHTML += await load_template("./templates/openFile.html",{"name":name})
+    document.querySelector("body").innerHTML += await load_template("./templates/openFile.html",this.Files[id])
   }
 }
 
