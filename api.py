@@ -87,4 +87,3 @@ async def connect(websocket: WebSocket):
 
 #frontend na adresie /
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
-print("XOXO")
