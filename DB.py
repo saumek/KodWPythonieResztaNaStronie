@@ -72,13 +72,13 @@ class DB():
 
             return cursor.fetchall()
         
-    def store(self,tablename:str,columns:str,values:str) -> int:
+    def store(self,tablename:str,columns:str,values: list | tuple) -> int:
         """
         dodaje nowy rekord do bazy danych\n
         przyklad uzycia:\n
         **db.store("files","filename , description","jakas_nazwa , opis_ciekawy)**
         """
-        return self.custom_sql(f"INSERT INTO {str(tablename)} ({str(columns)}) VALUES (?)",(str(values),))
+        return self.custom_sql(f"INSERT INTO {str(tablename)} ({str(columns)}) VALUES (?, ?, ?)",(values))
     
     def get(self,tablename:str,columns:str = "*"):
         """

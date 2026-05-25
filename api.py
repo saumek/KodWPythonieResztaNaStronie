@@ -34,16 +34,20 @@ async def get_photos():
     return db.get("files")
 
 @app.post("/api/storefile")
+#endpoint wymagający od użytkownika opisu i załączenia pliku
 async def store_file(
     description: str = Form(...),
     file: UploadFile = File(...)
 ):
+    #zapis pliku z wygenerowaną nazwą
     saved_filename = await file_add.save_file(file)
 
+    #pobranie aktualnej daty i godziny
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    db.custom_sql(
-        "INSERT INTO files (filename, description, created_at) VALUES (?, ?, ?)",
+    #zapis danych do bazy
+    db.store(
+        "files","filename , description, created_at",
         [saved_filename, description, current_time]
     )
     return {
