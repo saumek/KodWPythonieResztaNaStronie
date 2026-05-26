@@ -83,10 +83,40 @@ async function renameCategory(id){
   }
 }
 
+async function addToCategory(f_id,cat_id) {
+  if(cat_id!="bez"){  
+    await fetch("/api/join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        file_id: f_id,
+        category_id: cat_id,
+      }),
+    });
+
+    load_connections()
+  }
+}
+
+function load_connections(){
+  console.log("ladowanie polaczen");
+
+}
+
 async function openFile(id){
   if(!this.isSomethingOpen){
     this.isSomethingOpen=true
-    document.querySelector("body").innerHTML += await load_template("./templates/openFile.html",this.Files[id])
+    let dane = this.Files[id]
+    let cats = ""
+    for (const element of Object.values(this.Categories)) {
+          cats+=`<option value=${element['id']}>${element['name']}</option>`
+    }
+    console.log(dane);
+    
+    dane["cats"]=cats
+    document.querySelector("body").innerHTML += await load_template("./templates/openFile.html",dane)
   }
 }
 
