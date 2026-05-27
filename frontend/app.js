@@ -1,10 +1,10 @@
 
 async function startGallery(){
-  load_categories()
-  load_files()
+  current_category = -67
   isSomethingOpen = false
   isEditPhotoOpen = false
-
+  load_categories()
+  load_files()
 }
 
 async function load(url) {
@@ -24,6 +24,22 @@ async function load(url) {
   }
 }
 
+async function select_category(cat_id) {
+  let cat_cell = document.getElementById(`cat_${cat_id}`)
+  if(cat_id==current_category){
+    current_category=-67
+    cat_cell.style=""
+  }else{
+    current_category=Number(cat_id)
+    cells = document.querySelectorAll(".categoryCell")
+    for (const element of cells) {
+      element.style = ""
+    }
+    cat_cell.style="background: #1e2939"
+  }
+  await load_files()
+}
+
 async function load_template(template,values){
   const response = await fetch(template);
   let tekst = await response.text();
@@ -36,7 +52,6 @@ async function load_template(template,values){
 
 async function load_categories(){
   const url = "/api/categories";
- 
   const result = await load(url)
   let placeForCat = document.querySelectorAll(".kategorie")[0]
   placeForCat.innerHTML=''
@@ -53,7 +68,12 @@ async function get_single_html_category_cell(element){
 
 async function load_files(){
   const url = "/api/files";
-  const result = await load(url);
+  let result = NaN
+  if(current_category<0){
+    result = await load(url)
+  }else{
+    result = await load(`/api/category/${current_category}/files`)
+  }
   let placeForFiles = document.querySelectorAll(".files")[0]
   placeForFiles.innerHTML=''
   Files = {}
