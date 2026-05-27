@@ -109,7 +109,7 @@ class DB():
         **db.update("categories", "name = ?", "nowa_nazwa", "id = ?", "1")**\n
         **db.update("files", "filename = ?", "description = ?", "nowy_plik.txt, nowy_opis", "id = ?", "1")**
         """
-        return self.custom_sql(f"UPDATE {str(tablename)} SET {str(columns)} WHERE {str(conditions)}", (str(values), str(condition_values)))
+        return self.custom_sql(f"UPDATE {str(tablename)} SET {str(columns)} = ? WHERE {str(conditions)} = ?", (str(values), str(condition_values)))
     
     def delete(self, tablename:str, id:int|str):
         """
@@ -118,5 +118,19 @@ class DB():
         **db.delete("categories", id=1)**
         """
         return self.custom_sql(f"DELETE FROM {str(tablename)} WHERE id = ?",(str(id),))
+    
+    def get_from(self, tablename:str, columns:str, relation_column:str, relation_value):
+        """
+        Zwraca rekordy z danej tabeli po id\n
+        przykład użycia: \n
+        **db.get_from("categories", "*", "file_id", "1")** <- kategorie zdjecia
+        **db.ger_from("files", "*", "category_id", "1")** <- zdjęcia kategorii
+        """
+        join_column = "category_id" if tablename == "categories" else "file_id"
+        return self.custom_sql(
+            f"SELECT {tablename}.* FROM {tablename} " 
+            f"INNER JOIN file_category ON {tablename}.id = file_category.{join_column} " 
+            f"WHERE file_category.{relation_column} = ?", (str(relation_value),)
+        )
 
     

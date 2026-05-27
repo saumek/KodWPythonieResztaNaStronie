@@ -19,6 +19,9 @@ class FileCategory(BaseModel):
     file_id:int
     category_id:int
 
+class StoreFileModel(BaseModel):
+    description:str
+
 app = FastAPI()
 
 db = DB()
@@ -86,6 +89,19 @@ async def delete_category(id:int):
 async def add_file_to_category(content: FileCategory):
     db.store("file_category", "file_id, category_id", [content.file_id, content.category_id])
     return {"ok": True}
+
+@app.put("/api/change")
+async def update_file(file: StoreFileModel):
+    db.update("files", "description", file.description, "id", str(id))
+    return {"ok": True}
+
+@app.get("/api/file/{id}/categories")
+async def get_file_categories(id:int):
+    return db.get_from("categories", "*", "file_id", id)
+
+@app.get("/api/category/{id}/files")
+async def get_file_categories(id:int):
+    return db.get_from("files", "*", "category_id", id)
 
 """from gestures import gesture_loop
 import threading
