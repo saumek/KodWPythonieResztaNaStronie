@@ -19,8 +19,9 @@ class FileCategory(BaseModel):
     file_id:int
     category_id:int
 
-class StoreFileModel(BaseModel):
+class UpdateFileModel(BaseModel):
     description:str
+    id:int
 
 app = FastAPI()
 
@@ -78,7 +79,7 @@ async def set_category(category: StoreCategoryModel):
 
 @app.put("/api/category/{id}")
 async def update_category(id: int, category: StoreCategoryModel):
-    db.update("categories", "name", category.name, "id", str(id))
+    db.update("categories", "name", category.name, "id", id)
     return {"ok": True}
 
 @app.delete("/api/category/{id}")
@@ -91,8 +92,8 @@ async def add_file_to_category(content: FileCategory):
     return {"ok": True}
 
 @app.put("/api/change")
-async def update_file(file: StoreFileModel):
-    db.update("files", "description", file.description, "id", str(id))
+async def update_file(file: UpdateFileModel):
+    db.update("files", "description", file.description, "id", str(file.id))
     return {"ok": True}
 
 @app.get("/api/file/{id}/categories")
