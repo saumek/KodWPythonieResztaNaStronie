@@ -84,7 +84,7 @@ async def update_category(id: int, category: StoreCategoryModel):
 
 @app.delete("/api/category/{id}")
 async def delete_category(id:int):
-    db.delete("categories",id)
+    db.delete_by_id("categories",id)
 
 @app.post("/api/join")
 async def add_file_to_category(content: FileCategory):
@@ -103,6 +103,11 @@ async def get_file_categories(id:int):
 @app.get("/api/category/{id}/files")
 async def get_file_categories(id:int):
     return db.get_from("files", "*", "category_id", id)
+
+@app.delete("/api/file/{f_id}/category/{c_id}")
+async def get_file_categories(f_id:int,c_id:int):
+    return db.delete("file_category",["file_id","category_id"],[f_id,c_id])
+
 
 """from gestures import gesture_loop
 import threading

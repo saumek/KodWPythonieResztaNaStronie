@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded",async (e)=>{
 
 async function openGallery(){
     document.querySelectorAll(".main-div")[0].innerHTML=this.galleryTMP
-    startGallery()
+    await startGallery()
 }
 
 async function openCamera(){

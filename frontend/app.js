@@ -1,8 +1,10 @@
 
-function startGallery(){
+async function startGallery(){
   load_categories()
   load_files()
-  this.isSomethingOpen = false
+  isSomethingOpen = false
+  isEditPhotoOpen = false
+
 }
 
 async function load(url) {
@@ -38,10 +40,10 @@ async function load_categories(){
   const result = await load(url)
   let placeForCat = document.querySelectorAll(".kategorie")[0]
   placeForCat.innerHTML=''
-  this.Categories={}
+  Categories={}
   for (const element of result) {
-    this.Categories[element[0]]={"id":element[0],"name":element[1]}
-    placeForCat.innerHTML += await get_single_html_category_cell(this.Categories[element[0]])
+    Categories[element[0]]={"id":element[0],"name":element[1]}
+    placeForCat.innerHTML += await get_single_html_category_cell(Categories[element[0]])
   }
 }
 
@@ -54,10 +56,10 @@ async function load_files(){
   const result = await load(url);
   let placeForFiles = document.querySelectorAll(".files")[0]
   placeForFiles.innerHTML=''
-  this.Files = {}
+  Files = {}
   for (const element of result) {
-    this.Files[element[0]]={"id":element[0],"name":element[1],"desc":element[2],"date":element[3]}
-    placeForFiles.innerHTML += await get_single_html_file_cell(this.Files[element[0]])
+    Files[element[0]]={"id":element[0],"name":element[1],"desc":element[2],"date":element[3]}
+    placeForFiles.innerHTML += await get_single_html_file_cell(Files[element[0]])
   }
 }
 
@@ -66,8 +68,8 @@ async function get_single_html_file_cell(element){
 }
 
 async function createNewCategoryWindow(){
-  if(!this.isSomethingOpen){
-    this.isSomethingOpen = true
+  if(!isSomethingOpen){
+    isSomethingOpen = true
     document.querySelector("body").innerHTML+= await load_template("./templates/createCategory.html",{})
     form = document.getElementById("saveCat")
     form.addEventListener("submit",(event)=>{onAddCategorySubmit(form,event)})
@@ -75,42 +77,53 @@ async function createNewCategoryWindow(){
 }
 
 async function renameCategory(id){
-  if(!this.isSomethingOpen){
-    this.isSomethingOpen = true
-    document.querySelector("body").innerHTML+= await load_template("./templates/renameCategory.html",this.Categories[id])
+  if(!isSomethingOpen){
+    isSomethingOpen = true
+    document.querySelector("body").innerHTML+= await load_template("./templates/renameCategory.html",Categories[id])
     form = document.getElementById("changeCat")
     form.addEventListener("submit",(event)=>{onAddChangeCategoryNameSubmit(form,event)})
   }
 }
 
 async function addToCategory(f_id,cat_id) {
-  if(cat_id!="bez"){  
-    await fetch("/api/join", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        file_id: f_id,
-        category_id: cat_id,
-      }),
-    });
-
-    load_connections()
-  }
+  await fetch("/api/join", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      file_id: f_id,
+      category_id: cat_id,
+    }),
+  });
 }
 
-function load_connections(){
-  console.log("ladowanie polaczen");
+async function load_connections_html(file_id){
+  let f_cat = await load(`/api/file/${file_id}/categories`)
+  file_categories={}
+  file_categories[file_id]=[]
+  let categories_html = ''
+  let used_id=[]
+  for (const element of f_cat) {
+    used_id.push(element[0])
+    file_categories[file_id].push(element[0])
+    categories_html += await load_template("./templates/category_inFile.html",{'id':element[0],'name':element[1],'checked':'checked'})
+  }
 
+  for (const element of Object.values(Categories)) {
+    if(!used_id.includes(element['id'])){
+      categories_html += await load_template("./templates/category_inFile.html",{'id':element['id'],'name':element['name'],'checked':''})
+    }
+  }
+  document.getElementById("editFileCatPleace").innerHTML=categories_html
 }
 
 async function openFile(id){
-  if(!this.isSomethingOpen){
-    this.isSomethingOpen=true
-    let dane = this.Files[id]
+  if(!isSomethingOpen){
+    isSomethingOpen=true
+    let dane = Files[id]
     let cats = ""
-    for (const element of Object.values(this.Categories)) {
+    for (const element of Object.values(Categories)) {
           cats+=`<option value=${element['id']}>${element['name']}</option>`
     }
     console.log(dane);
@@ -122,15 +135,15 @@ async function openFile(id){
 
 function closeAddCategory(){
   document.querySelectorAll("div[dodawaniekategori]")[0].remove()
-  this.isSomethingOpen=false
+  isSomethingOpen=false
 }
 function closeChangeCategoryName(){
   document.querySelectorAll("div[zmianaNazwyKategori]")[0].remove()
-  this.isSomethingOpen=false
+  isSomethingOpen=false
 }
 function closePreview(){
   document.querySelectorAll("div[filePreview]")[0].remove()
-  this.isSomethingOpen=false
+  isSomethingOpen=false
 }
 
 function onAddCategorySubmit(form, event){
@@ -147,6 +160,28 @@ function onAddChangeCategoryNameSubmit(form, event){
   changeCat(id,catname)
   closeChangeCategoryName()
 }
+function onEditFileSubmit(form, event){
+  event.preventDefault();
+  let desc = form.querySelector('textarea').value
+  let file_id = form.querySelectorAll('#id')[0].value
+  const chceckedCats = form.querySelectorAll('input[type="checkbox"]:checked');
+  const uncheckedCats = form.querySelectorAll('input[type="checkbox"]:not(:checked)');
+
+  for (const element of chceckedCats) {
+    if(!file_categories[file_id].includes(Number(element.value))){ //nie bylo a jest czyli nowe
+      addToCategory(Number(file_id),Number(element.value))
+    }
+  }
+  for (const element of uncheckedCats) {
+    if(file_categories[file_id].includes(Number(element.value))){ //bylo a nie ma wiec usuwamy takie polaczenie
+      deleteConection(file_id,Number(element.value))
+    }
+  }
+  changeFileDesc(file_id,desc)
+  closeEditFile(file_id)
+}
+
+
 
 async function saveCat(catname){
   await fetch("/api/storecategory", {
@@ -174,6 +209,19 @@ async function changeCat(id,catname){
   load_categories()
 }
 
+async function changeFileDesc(f_id,desc){
+  await fetch(`/api/change`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      description:desc,
+      id:Number(f_id),
+    }),
+  });
+}
+
 async function deleteCategory(id){
   await fetch(`/api/category/${id}`, {
     method: "DELETE",
@@ -183,6 +231,36 @@ async function deleteCategory(id){
   });
   load_categories()
 }
+
+async function deleteConection(f_id,c_id){
+  await fetch(`/api/file/${f_id}/category/${c_id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+async function editFile(file_id){
+  if(!isEditPhotoOpen){
+    let dane=Files[file_id]
+    
+    const result = await load_template("./templates/editFile.html",dane)
+    document.querySelectorAll('body')[0].innerHTML+=result
+    await load_connections_html(file_id)
+    isEditPhotoOpen=true
+    form = document.getElementById("editFileForm")
+    form.addEventListener("submit",(event)=>{onEditFileSubmit(form,event)})
+  }
+}
+async function closeEditFile(f_id) {
+    document.querySelectorAll("div[editFile]")[0].remove()
+    await load_files()
+    isEditPhotoOpen=false
+    await closePreview()
+    await openFile(f_id)
+}
+
 // kod do testowania websocket //
 const ws = new WebSocket("ws://127.0.0.1:8000/ws");
 

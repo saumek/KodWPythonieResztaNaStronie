@@ -111,7 +111,20 @@ class DB():
         """
         return self.custom_sql(f"UPDATE {str(tablename)} SET {str(columns)} = ? WHERE {str(conditions)} = ?", (str(values), str(condition_values)))
     
-    def delete(self, tablename:str, id:int|str):
+    def delete(self, tablename:str, columns:list[str], values:list[str]):
+        """
+        usuwa rekordy w danej tabeli\n
+        przykład użycia\n
+        **db.delete("file_category", ['cat_id','file_id'], [1,2])**
+        """
+        condition = ''
+        for i,val in enumerate(columns):
+            condition+=f"{str(val)} = ?"
+            if i<(len(columns)-1):
+                condition+=" AND "
+        return self.custom_sql(f"DELETE FROM {str(tablename)} WHERE {str(condition)}",values)
+
+    def delete_by_id(self, tablename:str, id:int|str):
         """
         usuwa rekordy w danej tabeli\n
         przykład użycia\n
@@ -132,5 +145,3 @@ class DB():
             f"INNER JOIN file_category ON {tablename}.id = file_category.{join_column} " 
             f"WHERE file_category.{relation_column} = ?", (str(relation_value),)
         )
-
-    

@@ -1,0 +1,16 @@
+<div editFile class="z-50 absolute flex flex-row top-0 right-0 bg-[#241c278c] left-0 bottom-0 align-middle justify-around items-center pb-30">
+    <div class="relative bg-gray-800 w-150 h-75 rounded-4xl">
+        <div class="relative top-2 left-0 right-0 text-center h-6">Edytujesz plik</div>
+        <form id="editFileForm" class="relative left-0 right-0 h-65 mt-2 flex flex-col items-center justify-around gap-1">
+            <input type="number" name="id" id="id" value="${id}" hidden>
+            <div id="editFileCatPleace" class="relative w-[90%] h-10 flex flex-row overflow-y-hidden overflow-x-auto items-center border border-gray-700 rounded-4xl p-1 gap-2 [&::-webkit-scrollbar]:h-0">
+
+            </div>
+            <label class="relative w-[90%] flex flex-row h-30">opis:<textarea name="desc" id="desc" class="bg-gray-700 ml-2 w-full" required>${desc}</textarea></label>
+            <button type="submit" class=" hover:bg-gray-700 text-center rounded-4xl border-gray-700 transition-all duration-75 border-1 pt-1.5 pb-1.5 pl-3 pr-3 h-10">Zapisz</button>
+        </form>
+        <button onclick="closeEditFile()" class="absolute top-2 right-4 hover:bg-gray-700 text-center aspect-square w-7 rounded-full border-gray-700 transition-all duration-75 border-1"> 
+            <div class="absolute top-0 left-0 right-0 bottom-0 text-center">x</div>
+        </button>
+    </div>
+</div>
