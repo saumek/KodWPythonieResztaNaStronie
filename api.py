@@ -98,7 +98,7 @@ async def delete_photos(id:int):
         file_add.delete_file(filename)
 
     #usuwa wiersz o danym id z tabeli files
-    db.delete("files",id)
+    db.delete_by_id("files",id)
     return {"ok": True}
 
 @app.post("/api/join")
