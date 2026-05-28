@@ -83,6 +83,17 @@ async function load_files(){
   }
 }
 
+async function deleteFile(f_id){
+  await fetch(`/api/files/${f_id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  closePreview()
+  load_files()
+}
+
 async function get_single_html_file_cell(element){
     return load_template("./templates/photoCell.html",element)
 }
