@@ -44,8 +44,8 @@ async def get_photos():
 @app.post("/api/storefile")
 #endpoint wymagający od użytkownika opisu i załączenia pliku
 async def store_file(
-    description: str = Form(...),
-    file: UploadFile = File(...)
+    description: str = Form(...), #pole tekstowe
+    file: UploadFile = File(...)  #pole do przesłania pliku binarnego
 ):
     #zapis pliku z wygenerowaną nazwą
     saved_filename = await file_add.save_file(file)
@@ -85,6 +85,21 @@ async def update_category(id: int, category: StoreCategoryModel):
 @app.delete("/api/category/{id}")
 async def delete_category(id:int):
     db.delete_by_id("categories",id)
+
+@app.delete("/api/files/{id}")
+async def delete_photos(id:int):
+    file_data = db.get_by_id("files", "filename", id)
+    #sprawdza czy zdjęcie istnieje
+    if file_data:
+        #baza danych zwraca liste wierszy i kolumn [("nazwa_pliku.jpg",)]
+        #[0][0] oznaczają pierwszy wiersz i pierwszą kolumnę - więc funkcja zostawia string z nazwą pliku - "nazwa_pliku.jpg"
+        filename = file_data[0][0]
+        #wywołuje metode delete_file z klasy
+        file_add.delete_file(filename)
+
+    #usuwa wiersz o danym id z tabeli files
+    db.delete("files",id)
+    return {"ok": True}
 
 @app.post("/api/join")
 async def add_file_to_category(content: FileCategory):
