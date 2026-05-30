@@ -56,7 +56,7 @@ class DB():
             )
             """)
 
-    def custom_sql(self,sql:str,param:tuple):
+    def custom_sql(self,sql:str,param:tuple) -> list:
         """
             wykonuje dowolny sql z parametrami ( tam gdzie w sql wpiszemy ? tam wstawiony bedzie parametr)\n
             przyklay uzycia: \n
@@ -82,7 +82,14 @@ class DB():
         for _ in range(len(values)-1):
             sql+="?,"
         sql+="?)"
-        return self.custom_sql(sql,values)
+        if isinstance(values,list):
+            values=tuple(values)
+        with self.connCm as connection:
+            cursor = connection.cursor()
+
+            cursor.execute(sql,values)
+
+            return cursor.lastrowid
     
     def get(self,tablename:str,columns:str = "*"):
         """

@@ -81,6 +81,7 @@ async function load_files(){
     Files[element[0]]={"id":element[0],"name":element[1],"desc":element[2],"date":element[3]}
     placeForFiles.innerHTML += await get_single_html_file_cell(Files[element[0]])
   }
+  placeForFiles.innerHTML += await load_template("./templates/addNewFileCell.html",{})
 }
 
 async function deleteFile(f_id){
@@ -153,13 +154,13 @@ async function openFile(id){
   if(!isSomethingOpen){
     isSomethingOpen=true
     let dane = Files[id]
-    let cats = ""
-    for (const element of Object.values(Categories)) {
-          cats+=`<option value=${element['id']}>${element['name']}</option>`
-    }
-    console.log(dane);
+    // let cats = ""
+    // for (const element of Object.values(Categories)) {
+    //       cats+=`<option value=${element['id']}>${element['name']}</option>`
+    // }
+    // console.log(dane);
     
-    dane["cats"]=cats
+    // dane["cats"]=cats
     document.querySelector("body").innerHTML += await load_template("./templates/openFile.html",dane)
   }
 }
@@ -212,7 +213,12 @@ function onEditFileSubmit(form, event){
   closeEditFile(file_id)
 }
 
-
+async function addNewFile(){
+  if(!isSomethingOpen){
+    isSomethingOpen=false
+    document.querySelectorAll('body')[0].innerHTML += await load_template("./templates/import.html",{})
+  }
+}
 
 async function saveCat(catname){
   await fetch("/api/storecategory", {

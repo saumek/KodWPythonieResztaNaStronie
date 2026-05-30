@@ -1,0 +1,47 @@
+<div id="import" class="z-50 absolute flex flex-row top-0 right-0 bg-[#dfa7f911] left-0 bottom-0 align-middle justify-around items-center pb-30">
+    <div class="relative bg-gray-800 w-[60%] h-130 rounded-4xl">
+        <p class="relative top-2 h-7 w-full text-center items-center justify-center" >Import</p>
+        <button onclick="closeImportWindow()" class="absolute top-2 right-4 hover:bg-gray-700 text-center aspect-square w-7 rounded-full border-gray-700 transition-all duration-75 border-1"> 
+            <div class="absolute top-0 left-0 right-0 bottom-0 text-center">x</div>
+        </button>
+
+        <div id="importForm" class="absolute left-[5%] right-[5%] w-[90%] top-11 bottom-2 flex flex-col justify-around items-center">
+            <label  for="filesInput" class="flex flex-col items-center justify-center w-full h-70 border-2 border-dashed border-gray-800 rounded-2xl cursor-pointer bg-gray-900 hover:scale-101 transition">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6 h-35">
+                <svg
+                class="w-10 h-10 mb-3 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+                >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 16V4m0 0L8 8m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
+                />
+                </svg>
+
+                <p class="mb-1 text-sm text-gray-600">
+                <span class="font-semibold">Kliknij, aby wybrać pliki</span>
+                </p>
+
+                <p class="text-xs text-gray-400">
+                Zdjęcia albo Zip
+                </p>
+            </div>
+
+            <input
+                id="filesInput"
+                type="file"
+                multiple
+                class="hidden"
+                onchange="fileChanged(this)"
+            />
+            </label>
+            <div id="fileList" class="mt-4 gap-2 text-sm text-gray-700 bg-transparent min-h-25 max-h-50 w-full border-gray-900 border rounded-4xl flex flex-col overflow-y-auto"></div>
+            <button onclick="ImportSubmit()" class="w-25 h-15 text-center flex items-center justify-center border border-gray-900 rounded-4xl">Dodaj</button>
+        </div>
+
+    </div>
+</div>

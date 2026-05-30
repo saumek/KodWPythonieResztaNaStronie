@@ -9,7 +9,7 @@
             <label class="relative w-[90%] flex flex-row h-30">opis:<textarea name="desc" id="desc" class="bg-gray-700 ml-2 w-full" required>${desc}</textarea></label>
             <button type="submit" class=" hover:bg-gray-700 text-center rounded-4xl border-gray-700 transition-all duration-75 border-1 pt-1.5 pb-1.5 pl-3 pr-3 h-10">Zapisz</button>
         </form>
-        <button onclick="closeEditFile()" class="absolute top-2 right-4 hover:bg-gray-700 text-center aspect-square w-7 rounded-full border-gray-700 transition-all duration-75 border-1"> 
+        <button onclick="closeEditFile(${id})" class="absolute top-2 right-4 hover:bg-gray-700 text-center aspect-square w-7 rounded-full border-gray-700 transition-all duration-75 border-1"> 
             <div class="absolute top-0 left-0 right-0 bottom-0 text-center">x</div>
         </button>
     </div>

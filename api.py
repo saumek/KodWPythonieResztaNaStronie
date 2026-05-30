@@ -54,11 +54,13 @@ async def store_file(
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     #zapis danych do bazy
-    db.store(
+    id = db.store(
         "files","filename , description, created_at",
         [saved_filename, description, current_time]
     )
+    
     return {
+        "id": id,
         "status": "success",
         "filename": saved_filename,
         "description": description,
