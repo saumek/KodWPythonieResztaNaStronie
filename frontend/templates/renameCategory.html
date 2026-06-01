@@ -1,5 +1,5 @@
-<div zmianaNazwyKategori class="z-10 absolute flex flex-row top-0 right-0 bg-[#dfa7f911] left-0 bottom-0 align-middle justify-around items-center pb-30">
-    <div class="relative bg-gray-800 w-100 h-50 rounded-4xl">
+<div onclick="if (event.target === event.currentTarget) closeChangeCategoryName()" zmianaNazwyKategori class="z-60 absolute flex flex-row top-0 right-0 bg-[#dfa7f911] left-0 bottom-0 align-middle justify-around items-center pb-30">
+    <div class="relative bg-gray-800 w-100 h-50 z-67 rounded-4xl">
         <div class="relative top-2 left-0 right-0 text-center">Zmieniasz nazwe kategori</div>
         <form id="changeCat" class="relative left-0 right-0 top-15 flex flex-col items-center justify-around gap-6">
             <label class="relative w-[60%]">Nazwa:<input type="text" name="name" id="name" class="bg-gray-700 ml-2" value="${name}" required></label>

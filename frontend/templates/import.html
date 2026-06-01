@@ -1,4 +1,4 @@
-<div id="import" class="z-50 absolute flex flex-row top-0 right-0 bg-[#dfa7f911] left-0 bottom-0 align-middle justify-around items-center pb-30">
+<div id="import" onclick="if (event.target === event.currentTarget) closeImportWindow()" class="z-50 absolute flex flex-row top-0 right-0 bg-[#dfa7f911] left-0 bottom-0 align-middle justify-around items-center pb-30">
     <div class="relative bg-gray-800 w-[60%] h-130 rounded-4xl">
         <p class="relative top-2 h-7 w-full text-center items-center justify-center" >Import</p>
         <button onclick="closeImportWindow()" class="absolute top-2 right-4 hover:bg-gray-700 text-center aspect-square w-7 rounded-full border-gray-700 transition-all duration-75 border-1"> 
@@ -40,7 +40,7 @@
             />
             </label>
             <div id="fileList" class="mt-4 gap-2 text-sm text-gray-700 bg-transparent min-h-25 max-h-50 w-full border-gray-900 border rounded-4xl flex flex-col overflow-y-auto"></div>
-            <button onclick="ImportSubmit()" class="w-25 h-15 text-center flex items-center justify-center border border-gray-900 rounded-4xl">Dodaj</button>
+            <button onclick="ImportSubmit()" class="w-25 h-15 text-center flex items-center justify-center border border-gray-900 rounded-4xl transition-all duration-100 hover:scale-105 hover:bg-gray-900 ">Dodaj</button>
         </div>
 
     </div>
