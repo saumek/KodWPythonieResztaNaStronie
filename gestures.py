@@ -28,6 +28,32 @@ def detect_gesture(hand):
         return "LEFT"
     return "NONE"
 
+def process_frame(frame,queue):
+    timestamp = int(time.time() * 1000)
+
+    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
+    
+    result = detector.detect_for_video(mp_image, timestamp)
+
+    if result.hand_landmarks:
+        hand = result.hand_landmarks[0]
+
+        gesture=detect_gesture(hand)
+        if gesture!= "NONE":
+            queue.put(gesture)
+            #print(gesture)  
+
+        """ na razie tu koniec funkcji   
+        # rysowanie (debug)
+        for lm in hand:
+            cx, cy = int(lm.x * w), int(lm.y * h)
+            cv2.circle(frame, (cx, cy), 5, (0,255,0), -1)
+
+        cv2.imshow("Mouse Control", frame)"""
+
+
+"""        
 def gesture_loop(queue):
     # kamera
     cap = cv2.VideoCapture(0)
@@ -68,6 +94,7 @@ def gesture_loop(queue):
 
     cap.release()
     cv2.destroyAllWindows()
+"""
 
-if __name__ == "__main__":
-    gesture_loop(queue)
+#if __name__ == "__main__":
+#    process_frame(frame,queue)

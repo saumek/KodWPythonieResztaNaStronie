@@ -298,13 +298,21 @@ async function closeEditFile(f_id) {
     await openFile(f_id)
 }
 
-// kod do testowania websocket //
+// kod do testowania websocketa //
 const ws = new WebSocket("ws://127.0.0.1:8000/ws");
 
 ws.onopen = () => {
   console.log("WS connected");
   ws.send("hello");
 };
+
+/*
+ws.onmessage = (msg) => console.log("GEST:", msg.data);
+ws.onopen = () => console.log("OPEN");
+ws.onclose = () => console.log("CLOSE");
+ws.onerror = (e) => console.log("ERROR", e);
+ws.onmessage = (e) => console.log("MSG:", e.data);
+*/
 
 ws.onmessage = (event) => {
   if (event.data === "LEFT") {
@@ -314,3 +322,5 @@ ws.onmessage = (event) => {
     console.log(new Date(),"Klikam");
   }
 };
+
+window.openCamera = openCamera;

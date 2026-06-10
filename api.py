@@ -126,23 +126,28 @@ async def get_file_categories(f_id:int,c_id:int):
     return db.delete("file_category",["file_id","category_id"],[f_id,c_id])
 
 
-"""from gestures import gesture_loop
-import threading
+from gestures import process_frame
+import asyncio
+import numpy as np
+import cv2
 from queue import Queue
 queue = Queue()
-@app.on_event("startup")
-def start_gestures():
-    thread = threading.Thread(target=gesture_loop,args=(queue,))
-    thread.daemon = True
-    thread.start()
 
-import asyncio
 @app.websocket("/ws")
 async def connect(websocket: WebSocket):
     await websocket.accept()
     while True:
-        gesture = await asyncio.to_thread(queue.get)
-        await websocket.send_text(str(gesture))"""
+        message = await websocket.receive()
+        if "bytes" in message:
+            data = message["bytes"]
+        else:
+            continue
+        nparr = np.frombuffer(data, np.uint8)
+        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        process_frame(frame,queue)
+        if not queue.empty():
+            gesture = queue.get()
+            await websocket.send_text(str(gesture))
 
 #frontend na adresie /
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
