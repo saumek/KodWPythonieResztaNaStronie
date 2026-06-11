@@ -1,24 +1,91 @@
+import { startGestureSystem } from "./gestureController.js";
+
+let cameraTMP = "";
+let galleryTMP = "";
+
+// 🔥 wystawiamy do HTML (onclick)
+window.openCamera = openCamera;
+window.openGallery = openGallery;
+
+document.addEventListener("DOMContentLoaded", async () => {
+    console.log("INIT");
+
+    // 🔥 wczytaj galerię
+    const response = await fetch("./templates/gallery.html");
+    galleryTMP = await response.text();
+
+    // 🔥 odpal system gestów (kamera w tle)
+    startGestureSystem(ws);
+
+    // 🔥 pokaż galerię na start
+    openGallery();
+});
+
+async function openGallery(){
+    document.querySelector(".main-div").innerHTML = galleryTMP;
+
+    // 🔥 to ładuje kategorie + pliki
+    if (typeof startGallery === "function") {
+        await startGallery();
+    } else {
+        console.error("startGallery nie istnieje");
+    }
+}
+
+async function openCamera(){
+    if (cameraTMP === "") {
+        const response = await fetch("./templates/camera.html");
+        cameraTMP = await response.text();
+    }
+
+    document.querySelector(".main-div").innerHTML = cameraTMP;
+
+    // 🔥 tylko podgląd (nie wysyłanie do WS)
+    startCamera();
+}
+
+async function startCamera(){
+    const video = document.querySelector("#cameraVideo");
+
+    if (!video) {
+        console.error("Brak video");
+        return;
+    }
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
+    });
+
+    video.srcObject = stream;
+    await video.play();
+
+    console.log("CAMERA UI STARTED");
+}
+
+/*let cameraTMP = "";
+let galleryTMP = "";
+
 document.addEventListener("DOMContentLoaded",async (e)=>{
     console.log(window.location.href);
     
     const response = await fetch("./templates/gallery.html");
-    this.galleryTMP = await response.text();
     document.querySelectorAll(".main-div")[0]
-    this.cameraTMP = ""
     openGallery()
 })
 
 async function openGallery(){
-    document.querySelectorAll(".main-div")[0].innerHTML=this.galleryTMP
-    // zakomentowalam bo blokowalo await startGallery()
+    document.querySelectorAll(".main-div")[0].innerHTML=galleryTMP
+    // zakomentowalam bo blokowalo
+    await startGallery()
 }
 
 async function openCamera(){
-    if(this.cameraTMP==""){
+    if(cameraTMP==""){
     const response = await fetch("./templates/camera.html");
-    this.cameraTMP = await response.text();
+    cameraTMP = await response.text();
     }
-    document.querySelectorAll(".main-div")[0].innerHTML = this.cameraTMP
+    document.querySelectorAll(".main-div")[0].innerHTML = cameraTMP
     //startPhotos()
     startCamera()
 }
@@ -67,3 +134,15 @@ async function startCamera(){
 
     console.log("START CAMERA");
 }
+
+import { startGestureSystem } from "./gestureController.js";
+
+window.openCamera = openCamera;
+window.openGallery = openGallery;
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const response = await fetch("./templates/gallery.html");
+    galleryTMP = await response.text();
+    startGestureSystem(ws); // 🔥 KLUCZOWE
+    openGallery();
+});*/
