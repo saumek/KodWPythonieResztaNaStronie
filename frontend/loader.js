@@ -58,8 +58,8 @@ async function startCamera(){
     });
 
     video.srcObject = stream;
+    video.style.transform = "scaleX(-1)";
     await video.play();
-
     console.log("CAMERA UI STARTED");
 }
 

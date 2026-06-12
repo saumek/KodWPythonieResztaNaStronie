@@ -25,12 +25,19 @@ export async function startGestureSystem(ws) {
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-
     setInterval(() => {
         if (video.readyState !== 4) return;
         if (ws.readyState !== 1) return;
 
+        ctx.save();
+
+        // Lustrzane odbicie poziome
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        ctx.restore();
 
         canvas.toBlob((blob) => {
             if (!blob) return;
@@ -39,7 +46,6 @@ export async function startGestureSystem(ws) {
                 ws.send(buffer);
             });
         }, "image/jpeg", 0.6);
-
     }, 100);
 
     console.log("GESTURE SYSTEM STARTED");
