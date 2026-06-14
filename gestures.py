@@ -4,6 +4,7 @@ import math
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 import time
+import pyautogui
 
 BaseOptions = mp.tasks.BaseOptions
 HandLandmarker = mp.tasks.vision.HandLandmarker
@@ -15,6 +16,11 @@ options = vision.HandLandmarkerOptions(base_options=BaseOptions(model_asset_path
                                        running_mode=VisionRunningMode.VIDEO)
 
 detector = vision.HandLandmarker.create_from_options(options)
+
+# parametry kursor ;)
+screen_w, screen_h = pyautogui.size()
+prev_x, prev_y = 0, 0
+smooth = 5
 
 def dist(a, b):
     return math.hypot(a.x - b.x, a.y - b.y)
@@ -38,6 +44,21 @@ def process_frame(frame,queue):
 
     if result.hand_landmarks:
         hand = result.hand_landmarks[0]
+        
+        # kursor = czubek palca wskazującego
+        global prev_x, prev_y
+        index_finger = hand[8]
+
+        x = int(index_finger.x * screen_w)
+        y = int(index_finger.y * screen_h)
+
+        # smoothing (żeby nie latało)
+        curr_x = prev_x + (x - prev_x) / smooth
+        curr_y = prev_y + (y - prev_y) / smooth
+
+        pyautogui.moveTo(curr_x, curr_y)
+
+        prev_x, prev_y = curr_x, curr_y
 
         gesture=detect_gesture(hand)
         if gesture!= "NONE":

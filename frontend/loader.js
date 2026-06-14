@@ -3,28 +3,28 @@ import { startGestureSystem } from "./gestureController.js";
 let cameraTMP = "";
 let galleryTMP = "";
 
-// 🔥 wystawiamy do HTML (onclick)
+// wystawiamy do HTML (onclick)
 window.openCamera = openCamera;
 window.openGallery = openGallery;
 
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("INIT");
 
-    // 🔥 wczytaj galerię
+    // wczytaj galerię
     const response = await fetch("./templates/gallery.html");
     galleryTMP = await response.text();
 
-    // 🔥 odpal system gestów (kamera w tle)
+    // odpal system gestów (kamera w tle)
     startGestureSystem(ws);
 
-    // 🔥 pokaż galerię na start
+    // pokaż galerię na start
     openGallery();
 });
 
 async function openGallery(){
     document.querySelector(".main-div").innerHTML = galleryTMP;
 
-    // 🔥 to ładuje kategorie + pliki
+    // to ładuje kategorie + pliki
     if (typeof startGallery === "function") {
         await startGallery();
     } else {
@@ -40,7 +40,7 @@ async function openCamera(){
 
     document.querySelector(".main-div").innerHTML = cameraTMP;
 
-    // 🔥 tylko podgląd (nie wysyłanie do WS)
+    // tylko podgląd (nie wysyłanie do WS)
     startCamera();
 }
 
@@ -143,6 +143,6 @@ window.openGallery = openGallery;
 document.addEventListener("DOMContentLoaded", async () => {
     const response = await fetch("./templates/gallery.html");
     galleryTMP = await response.text();
-    startGestureSystem(ws); // 🔥 KLUCZOWE
+    startGestureSystem(ws); // KLUCZOWE
     openGallery();
 });*/
