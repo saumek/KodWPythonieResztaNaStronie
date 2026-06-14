@@ -130,11 +130,16 @@ from gestures import process_frame
 import asyncio
 import numpy as np
 import cv2
+import time
 from queue import Queue
 queue = Queue()
+COOLDOWN = 1.0
 
 @app.websocket("/ws")
 async def connect(websocket: WebSocket):
+    last_gesture = None
+    last_time = 0
+
     await websocket.accept()
     while True:
         message = await websocket.receive()
@@ -147,6 +152,13 @@ async def connect(websocket: WebSocket):
         process_frame(frame,queue)
         if not queue.empty():
             gesture = queue.get()
+            now = time.time()
+
+            if gesture == last_gesture and (now - last_time) < COOLDOWN:
+                continue
+
+            last_gesture = gesture
+            last_time = now
             await websocket.send_text(str(gesture))
 
 #frontend na adresie /

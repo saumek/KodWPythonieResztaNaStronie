@@ -314,12 +314,22 @@ ws.onerror = (e) => console.log("ERROR", e);
 ws.onmessage = (e) => console.log("MSG:", e.data);
 */
 
-ws.onmessage = (event) => {
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+ws.onmessage = async (event) => {
   if (event.data === "LEFT") {
-    console.log(new Date(),"GEST W LEWO");
+    openGallery();
   }
-  if (event.data === "KLIK") {
-    console.log(new Date(),"Klikam");
+  if (event.data === "RIGHT") {
+    openCamera();
+  }
+  /*if (event.data === "KLIK") {
+    funkcja do wpisania :)
+  }*/
+  if (event.data === "PHOTO") => {
+    takePhoto();
   }
 };
 
