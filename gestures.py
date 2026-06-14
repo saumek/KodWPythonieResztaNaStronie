@@ -20,7 +20,7 @@ detector = vision.HandLandmarker.create_from_options(options)
 # parametry kursor ;)
 screen_w, screen_h = pyautogui.size()
 prev_x, prev_y = 0, 0
-smooth = 5
+smooth = 1
 
 def dist(a, b):
     return math.hypot(a.x - b.x, a.y - b.y)
@@ -56,7 +56,7 @@ def process_frame(frame,queue):
         curr_x = prev_x + (x - prev_x) / smooth
         curr_y = prev_y + (y - prev_y) / smooth
 
-        pyautogui.moveTo(curr_x, curr_y)
+        pyautogui.moveTo(curr_x, curr_y, _pause=False)
 
         prev_x, prev_y = curr_x, curr_y
 
