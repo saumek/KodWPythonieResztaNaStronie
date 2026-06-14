@@ -328,7 +328,8 @@ ws.onmessage = async (event) => {
   /*if (event.data === "KLIK") {
     funkcja do wpisania :)
   }*/
-  if (event.data === "PHOTO") => {
+  if (event.data === "PHOTO") {
+    await sleep(2000)
     takePhoto();
   }
 };
