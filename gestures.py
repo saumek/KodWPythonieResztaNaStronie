@@ -28,14 +28,17 @@ def dist(a, b):
 def detect_gesture(hand):
     index_finger = hand[8]  #wskazujący
     thumb = hand[4]  #kciuk
-    if dist(thumb, index_finger) < 0.05:
+    pinky = hand[20]  #kciuk
+    ring_finger = hand[16]  #serdeczny
+    print()
+    if dist(thumb, index_finger) < 0.05 and dist(thumb,pinky)>0.15: #maly palec tez musi byc troche dalej
         return "KLIK"
     elif index_finger.x < 0.05:
         return "LEFT"
     elif index_finger.x > 0.95:
         return "RIGHT"
-    #elif # DO WYMYŚLENIA :)
-    #    return "PHOTO"
+    elif dist(ring_finger,thumb)<0.05: #połączenie serdeczny z kciukiem
+        return "PHOTO"
     return "NONE"
 
 def execute_gesture(gesture:str):

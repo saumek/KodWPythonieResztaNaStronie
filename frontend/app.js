@@ -327,7 +327,7 @@ ws.onmessage = async (event) => {
     case "RIGHT":
       openCamera();
       break;
-    case "KLIK":
+    case "PHOTO":
       if (photo_ready){
         photo_ready=false
         licznik = await load_template("templates/counter_to_take_a_photo.html",{})
