@@ -38,10 +38,16 @@ async function openCamera(){
         cameraTMP = await response.text();
     }
 
+    
     document.querySelector(".main-div").innerHTML = cameraTMP;
-
     // tylko podgląd (nie wysyłanie do WS)
-    startCamera();
+    await startCamera();
+    // to ładuje kategorie + pliki
+    if (typeof cameraInit === "function") {
+        await cameraInit();
+    } else {
+        console.error("cameraInit nie istnieje");
+    }
 }
 
 async function startCamera(){

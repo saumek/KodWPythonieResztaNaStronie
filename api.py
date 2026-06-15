@@ -126,14 +126,14 @@ async def get_file_categories(f_id:int,c_id:int):
     return db.delete("file_category",["file_id","category_id"],[f_id,c_id])
 
 
-from gestures import process_frame
+from gestures import process_frame, execute_gesture
 import asyncio
 import numpy as np
 import cv2
 import time
 from queue import Queue
 queue = Queue()
-COOLDOWN = 1.0
+COOLDOWN = 0.67
 
 @app.websocket("/ws")
 async def connect(websocket: WebSocket):
@@ -159,6 +159,7 @@ async def connect(websocket: WebSocket):
 
             last_gesture = gesture
             last_time = now
+            execute_gesture(gesture)
             await websocket.send_text(str(gesture))
 
 #frontend na adresie /

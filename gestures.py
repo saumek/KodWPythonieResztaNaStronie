@@ -29,14 +29,20 @@ def detect_gesture(hand):
     index_finger = hand[8]  #wskazujący
     thumb = hand[4]  #kciuk
     if dist(thumb, index_finger) < 0.05:
-        return "KLIK" # NIE MA JESZCZE W JS
-    elif index_finger.x < 0.1:
+        return "KLIK"
+    elif index_finger.x < 0.05:
         return "LEFT"
-    elif index_finger.x > 0.9:
+    elif index_finger.x > 0.95:
         return "RIGHT"
     #elif # DO WYMYŚLENIA :)
     #    return "PHOTO"
     return "NONE"
+
+def execute_gesture(gesture:str):
+    match gesture:
+        case "KLIK":
+            pyautogui.click(_pause=False)
+        
 
 def process_frame(frame,queue):
     timestamp = int(time.time() * 1000)

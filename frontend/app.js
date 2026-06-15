@@ -3,6 +3,7 @@ async function startGallery(){
   current_category = -67
   isSomethingOpen = false
   isEditPhotoOpen = false
+  photo_ready=false
   load_categories()
   load_files()
 }
@@ -319,18 +320,24 @@ function sleep(ms) {
 }
 
 ws.onmessage = async (event) => {
-  if (event.data === "LEFT") {
-    openGallery();
-  }
-  if (event.data === "RIGHT") {
-    openCamera();
-  }
-  /*if (event.data === "KLIK") {
-    funkcja do wpisania :)
-  }*/
-  if (event.data === "PHOTO") {
-    await sleep(2000)
-    takePhoto();
+  switch (event.data){
+    case "LEFT":
+      openGallery();
+      break;
+    case "RIGHT":
+      openCamera();
+      break;
+    case "KLIK":
+      if (photo_ready){
+        photo_ready=false
+        licznik = await load_template("templates/counter_to_take_a_photo.html",{})
+        document.body.insertAdjacentHTML("beforeend", licznik);      
+        await sleep(3000);
+        document.getElementById('counter-usmiech').remove()
+        takePhoto();
+        photo_ready=true
+      }
+      break;
   }
 };
 

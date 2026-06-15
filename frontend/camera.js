@@ -1,3 +1,6 @@
+async function cameraInit(){
+    photo_ready=true
+}
 function takePhoto(){
     let canvas = document.createElement('canvas');
     let video = document.getElementById('cameraVideo');
